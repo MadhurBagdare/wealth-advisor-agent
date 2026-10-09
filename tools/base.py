@@ -27,8 +27,11 @@ class BaseTool(ABC):
     def execute(self, **kwargs) -> ToolResult:
         """Run the tool with given parameters and return a structured result."""
 
-    def validate_params(self, **kwargs) -> bool:
-        """Optional pre-execution validation. Override for custom checks."""
+    def validate_params(self, required: list[str], provided: dict) -> bool:
+        missing = [k for k in required if k not in provided or provided[k] is None]
+        if missing:
+            self.logger.warning("Missing required params: %s", missing)
+            return False
         return True
 
     def __repr__(self):

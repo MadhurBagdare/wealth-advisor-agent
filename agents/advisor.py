@@ -9,6 +9,7 @@ from models import (
     AdvisoryReport,
     RiskLevel,
 )
+from config import CONCENTRATION_RISK_THRESHOLD
 
 
 class AdvisorAgent(BaseAgent):
@@ -102,7 +103,7 @@ class AdvisorAgent(BaseAgent):
             for cr in analysis.concentration_risks:
                 recs.append(
                     f"Rebalance {cr['asset_class']} allocation (currently {cr['weight']:.1%}) "
-                    f"to below {35}% for better diversification."
+                    f"to below {CONCENTRATION_RISK_THRESHOLD:.0%} for better diversification."
                 )
 
         # Goal-based recommendations

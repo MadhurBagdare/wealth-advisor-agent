@@ -48,13 +48,13 @@ A lightweight multi-agent system that acts as a Wealth Advisor Assistant. It ing
 | Large transactions | Z-score (σ > 2.0) | Outlier amounts relative to the client's own transaction history |
 | Risky assets | Keyword matching | Crypto, penny stocks, leveraged/speculative instruments |
 | Rapid trading | Buy-sell gap analysis | Same instrument bought and sold within 30 days |
-| Concentration risk | Portfolio weight | Any single asset class exceeding 35% of total portfolio |
+| Concentration risk | Asset-class weight | Any asset class exceeding 35% of total portfolio value |
 
 ## Key Decisions and Trade-offs
 
 | Decision | Rationale |
 |---|---|
-| **Pure Python, no external dependencies** | The assignment values a runnable system with clear setup. Zero-dependency means `python main.py` just works — no pip install, no API keys, no Docker. |
+| **Pure Python, no external dependencies** | The assignment values a runnable system with clear setup. Zero-dependency means `python3 main.py` just works — no pip install, no API keys, no Docker. |
 | **Mock tools instead of real APIs** | Keeps the project self-contained while demonstrating the same tool abstraction that would wrap a live REST client. Swapping in a real CRM SDK means implementing `BaseTool.execute()` — no agent code changes. |
 | **Short-term memory as OrderedDict with eviction** | Simple, fast, and sufficient for a sequential pipeline. If agents ran in parallel, this would need locking or an actor model — but for a linear flow it avoids unnecessary complexity. |
 | **Long-term memory as a JSON file** | Good enough for a demo; in production this would be a database. The interface is identical, so migrating is a one-file change. |
@@ -75,7 +75,6 @@ A lightweight multi-agent system that acts as a Wealth Advisor Assistant. It ing
 wealth-advisor-agent/
 ├── main.py              # Entry point
 ├── config.py            # Centralised configuration
-├── requirements.txt     # Dependencies (none)
 ├── agents/
 │   ├── base.py          # Abstract base agent
 │   ├── orchestrator.py  # Pipeline coordinator
@@ -94,6 +93,11 @@ wealth-advisor-agent/
 │   └── schemas.py       # Dataclasses and enums
 ├── data/
 │   └── sample_client.json
+├── tests/
+│   ├── test_analyzer.py # Anomaly detection + analysis tests
+│   ├── test_tools.py    # Tool layer tests
+│   └── test_memory.py   # Memory subsystem tests
+├── pyproject.toml       # Project metadata
 └── output/              # Generated reports land here
 ```
 
@@ -109,16 +113,22 @@ wealth-advisor-agent/
 cd wealth-advisor-agent
 
 # Default run with sample data (includes human-in-the-loop prompt)
-python main.py
+python3 main.py
 
 # Skip the human review checkpoint
-python main.py --no-human-review
+python3 main.py --no-human-review
 
 # Use a custom input file
-python main.py --input path/to/client.json
+python3 main.py --input path/to/client.json
 
 # Verbose logging
-python main.py --verbose --no-human-review
+python3 main.py --verbose --no-human-review
+```
+
+### Tests
+
+```bash
+python3 -m unittest discover tests -v
 ```
 
 ### Sample Output
@@ -130,20 +140,25 @@ Running with the included sample data produces a report like:
   ADVISORY REPORT SUMMARY
 ============================================================
   Client:     Rajesh Mehta (CLT-2847)
-  Risk:       ELEVATED — Immediate advisor review recommended.
-  Anomalies:  7
-  Saved to:   output/advisory_report_CLT-2847_20261009_143022.json
+  Risk:       ELEVATED — Immediate advisor review recommended. Multiple high-severity anomalies detected.
+  Anomalies:  5
+  Saved to:   output/advisory_report_CLT-2847_20261009_114834.json
 
   Recommendations:
-    1. Review exposure to Unknown Crypto Token — high-risk asset class
+    1. Large transaction flagged: Unusually large withdrawal of
+       ₹2,500,000 on 2026-09-03 (Savings Account). Verify source
+       of funds and intent.
+    2. Review exposure to Unknown Crypto Token — high-risk asset class
        not aligned with 'moderate' risk profile.
-    2. Review exposure to Penny Stock XYZ — high-risk asset class
+    3. Review exposure to Penny Stock XYZ — high-risk asset class
        not aligned with 'moderate' risk profile.
-    3. Investigate rapid buy-sell pattern in HDFCBANK. Confirm this
+    4. Investigate rapid buy-sell pattern in HDFCBANK. Confirm this
        is intentional and not churning.
-    4. Rebalance real_estate allocation (currently 48.1%) to below
+    5. Rebalance real_estate allocation (currently 48.1%) to below
        35% for better diversification.
-    5. Client has expressed interest in ESG funds — present
+    6. Goal 'Retirement Corpus' is at 37.0% — consider increasing
+       SIP contributions.
+    7. Client has expressed interest in ESG funds — present
        ESG-compliant alternatives during review.
 
   Next Steps:

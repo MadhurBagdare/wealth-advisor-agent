@@ -12,6 +12,9 @@ class DataLoaderTool(BaseTool):
         super().__init__("data_loader")
 
     def execute(self, *, file_path: str) -> ToolResult:
+        if not self.validate_params(required=["file_path"], provided={"file_path": file_path}):
+            return ToolResult(success=False, error="file_path is required")
+
         path = Path(file_path)
         if not path.exists():
             self.logger.error("File not found: %s", file_path)

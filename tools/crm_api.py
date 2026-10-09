@@ -27,6 +27,9 @@ class CRMApiTool(BaseTool):
         super().__init__("crm_api")
 
     def execute(self, *, client_id: str) -> ToolResult:
+        if not self.validate_params(required=["client_id"], provided={"client_id": client_id}):
+            return ToolResult(success=False, error="client_id is required")
+
         self.logger.info("Fetching CRM data for client %s", client_id)
 
         record = _MOCK_CRM_STORE.get(client_id)

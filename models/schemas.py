@@ -1,5 +1,4 @@
 from dataclasses import dataclass, field
-from typing import Optional
 from enum import Enum
 
 
@@ -15,7 +14,6 @@ class AnomalyType(Enum):
     RAPID_TRADING = "rapid_trading"
     CONCENTRATION_RISK = "concentration_risk"
     RISKY_ASSET = "risky_asset"
-    UNUSUAL_PATTERN = "unusual_pattern"
 
 
 @dataclass
@@ -74,6 +72,7 @@ class AnalysisResult:
     risk_score: float = 0.0
     concentration_risks: list[dict] = field(default_factory=list)
     goal_progress: list[dict] = field(default_factory=list)
+    benchmark_comparison: dict = field(default_factory=dict)
 
 
 @dataclass
@@ -82,7 +81,7 @@ class AdvisoryReport:
     client_name: str
     summary: str
     risk_assessment: str
-    anomalies: list[dict] = field(default_factory=dict)
+    anomalies: list[dict] = field(default_factory=list)
     recommendations: list[str] = field(default_factory=list)
     goal_tracking: list[dict] = field(default_factory=list)
     asset_allocation: dict = field(default_factory=dict)

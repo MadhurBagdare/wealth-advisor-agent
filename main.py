@@ -5,10 +5,8 @@ Entry point that configures logging and launches the orchestrator pipeline.
 """
 
 import argparse
-import json
 import logging
 import sys
-from dataclasses import asdict
 from pathlib import Path
 
 from config import LOG_LEVEL, LOG_FORMAT, LOGS_DIR, DATA_DIR

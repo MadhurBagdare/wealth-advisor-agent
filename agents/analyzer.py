@@ -1,5 +1,4 @@
 import statistics
-from collections import Counter
 from datetime import datetime
 
 from .base import BaseAgent, AgentResult
@@ -41,6 +40,7 @@ class AnalyzerAgent(BaseAgent):
 
         allocation = self._compute_allocation(profile)
         goal_progress = self._assess_goals(profile)
+        benchmark_comparison = self._compare_to_benchmarks(profile)
         risk_score = self._compute_risk_score(profile, anomalies)
 
         concentration_risks = [
@@ -55,6 +55,7 @@ class AnalyzerAgent(BaseAgent):
             risk_score=risk_score,
             concentration_risks=concentration_risks,
             goal_progress=goal_progress,
+            benchmark_comparison=benchmark_comparison,
         )
         self.memory.set("analysis_result", result)
 
@@ -126,15 +127,19 @@ class AnalyzerAgent(BaseAgent):
         if not profile.holdings or profile.portfolio_value <= 0:
             return []
 
-        anomalies = []
+        class_totals: dict[str, float] = {}
         for h in profile.holdings:
-            weight = h.value / profile.portfolio_value
+            class_totals[h.asset_class] = class_totals.get(h.asset_class, 0) + h.value
+
+        anomalies = []
+        for asset_class, total_value in class_totals.items():
+            weight = total_value / profile.portfolio_value
             if weight > CONCENTRATION_RISK_THRESHOLD:
                 anomalies.append(Anomaly(
                     type=AnomalyType.CONCENTRATION_RISK,
                     severity=RiskLevel.HIGH,
-                    description=f"{h.instrument} represents {weight:.1%} of portfolio — exceeds {CONCENTRATION_RISK_THRESHOLD:.0%} threshold",
-                    details={"instrument": h.instrument, "weight": round(weight, 4)},
+                    description=f"{asset_class} represents {weight:.1%} of portfolio — exceeds {CONCENTRATION_RISK_THRESHOLD:.0%} threshold",
+                    details={"asset_class": asset_class, "weight": round(weight, 4)},
                 ))
         return anomalies
 
@@ -160,6 +165,26 @@ class AnalyzerAgent(BaseAgent):
                 "deadline": goal.get("deadline", "N/A"),
             })
         return progress
+
+    def _compare_to_benchmarks(self, profile: ClientProfile) -> dict:
+        benchmarks = self.memory.get("benchmarks")
+        sector_data = self.memory.get("sector_data")
+        if not benchmarks:
+            return {}
+
+        comparison = {"nifty50_1y_return": benchmarks.get("NIFTY50", {}).get("1y_return")}
+
+        if sector_data:
+            betas = [info.get("beta", 1.0) for info in sector_data.values()]
+            if betas:
+                comparison["portfolio_weighted_beta"] = round(sum(betas) / len(betas), 2)
+
+        equity_value = sum(h.value for h in profile.holdings if h.asset_class == "equity")
+        fd_value = sum(h.value for h in profile.holdings if h.asset_class == "fixed_deposit")
+        total = equity_value + fd_value or 1
+        comparison["equity_fd_ratio"] = round(equity_value / total, 2)
+
+        return comparison
 
     def _compute_risk_score(self, profile: ClientProfile, anomalies: list[Anomaly]) -> float:
         severity_weights = {RiskLevel.LOW: 1, RiskLevel.MODERATE: 2, RiskLevel.HIGH: 4, RiskLevel.CRITICAL: 8}
