@@ -5,5 +5,25 @@ description = "Multi-agent Wealth Advisor Assistant with anomaly detection"
 requires-python = ">=3.11"
 dependencies = []
 
+[project.optional-dependencies]
+dev = ["mypy", "ruff", "pytest"]
+
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+log_cli = false
+log_cli_level = "CRITICAL"
+
+[tool.mypy]
+python_version = "3.11"
+strict = true
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+
+[tool.ruff]
+target-version = "py311"
+line-length = 120
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "N", "UP", "B", "SIM", "RUF"]
+ignore = ["E501"]

@@ -131,6 +131,12 @@ python3 main.py --verbose --no-human-review
 python3 -m unittest discover tests -v
 ```
 
+Runs 34 tests across unit tests (analyzer, tools, memory) and integration tests (full pipeline end-to-end).
+
+### CI
+
+GitHub Actions runs all tests on Python 3.11, 3.12, and 3.13 on every push and pull request. See `.github/workflows/ci.yml`.
+
 ### Sample Output
 
 Running with the included sample data produces a report like:
