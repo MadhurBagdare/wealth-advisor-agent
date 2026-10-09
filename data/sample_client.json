@@ -1,0 +1,98 @@
+{
+  "client_id": "CLT-2847",
+  "name": "Rajesh Mehta",
+  "age": 52,
+  "risk_profile": "moderate",
+  "investment_horizon": "10 years",
+  "annual_income": 4500000,
+  "portfolio": {
+    "total_value": 18500000,
+    "holdings": [
+      {
+        "asset_class": "equity",
+        "instrument": "HDFC Bank Ltd",
+        "symbol": "HDFCBANK",
+        "quantity": 500,
+        "avg_cost": 1450.0,
+        "current_price": 1620.0,
+        "value": 810000
+      },
+      {
+        "asset_class": "equity",
+        "instrument": "Reliance Industries",
+        "symbol": "RELIANCE",
+        "quantity": 300,
+        "avg_cost": 2200.0,
+        "current_price": 2480.0,
+        "value": 744000
+      },
+      {
+        "asset_class": "equity",
+        "instrument": "Infosys Ltd",
+        "symbol": "INFY",
+        "quantity": 800,
+        "avg_cost": 1380.0,
+        "current_price": 1510.0,
+        "value": 1208000
+      },
+      {
+        "asset_class": "mutual_fund",
+        "instrument": "Axis Bluechip Fund",
+        "scheme_code": "MF-1023",
+        "units": 12000,
+        "nav": 48.5,
+        "value": 582000
+      },
+      {
+        "asset_class": "mutual_fund",
+        "instrument": "SBI Small Cap Fund",
+        "scheme_code": "MF-2091",
+        "units": 8500,
+        "nav": 112.3,
+        "value": 954550
+      },
+      {
+        "asset_class": "fixed_deposit",
+        "instrument": "ICICI Bank FD",
+        "principal": 5000000,
+        "rate": 7.1,
+        "maturity_date": "2027-03-15",
+        "value": 5000000
+      },
+      {
+        "asset_class": "gold",
+        "instrument": "Sovereign Gold Bond 2029",
+        "units": 50,
+        "purchase_price": 4800,
+        "current_price": 6200,
+        "value": 310000
+      },
+      {
+        "asset_class": "real_estate",
+        "instrument": "Residential Property - Pune",
+        "purchase_value": 7500000,
+        "current_value": 8900000,
+        "value": 8900000
+      }
+    ]
+  },
+  "transactions": [
+    {"date": "2026-09-01", "type": "buy", "instrument": "HDFCBANK", "amount": 145000, "description": "Regular SIP equivalent"},
+    {"date": "2026-09-03", "type": "withdrawal", "instrument": "Savings Account", "amount": 2500000, "description": "Large withdrawal"},
+    {"date": "2026-09-05", "type": "buy", "instrument": "RELIANCE", "amount": 66000, "description": "Market dip purchase"},
+    {"date": "2026-09-08", "type": "sell", "instrument": "INFY", "amount": 755000, "description": "Partial profit booking"},
+    {"date": "2026-09-10", "type": "buy", "instrument": "SBI Small Cap Fund", "amount": 25000, "description": "Monthly SIP"},
+    {"date": "2026-09-12", "type": "buy", "instrument": "Unknown Crypto Token", "amount": 1800000, "description": "Crypto investment"},
+    {"date": "2026-09-15", "type": "sell", "instrument": "HDFCBANK", "amount": 324000, "description": "Quick sell after buy"},
+    {"date": "2026-09-18", "type": "buy", "instrument": "Axis Bluechip Fund", "amount": 25000, "description": "Monthly SIP"},
+    {"date": "2026-09-20", "type": "withdrawal", "instrument": "Savings Account", "amount": 500000, "description": "Regular expense"},
+    {"date": "2026-09-22", "type": "buy", "instrument": "RELIANCE", "amount": 880000, "description": "Concentrated position increase"},
+    {"date": "2026-09-25", "type": "buy", "instrument": "Penny Stock XYZ", "amount": 950000, "description": "Speculative trade"},
+    {"date": "2026-09-28", "type": "sell", "instrument": "Sovereign Gold Bond 2029", "amount": 155000, "description": "Partial gold sale"}
+  ],
+  "goals": [
+    {"name": "Retirement Corpus", "target": 50000000, "deadline": "2036-01-01"},
+    {"name": "Daughter's Education", "target": 8000000, "deadline": "2030-06-01"},
+    {"name": "Emergency Fund", "target": 2000000, "deadline": "2027-01-01"}
+  ]
+}
